@@ -1,0 +1,107 @@
+
+<HTML>
+	<Head>
+		<Title>Dummy creator</Title>
+			<script type="text/javascript">
+			var output = {};
+			function dummyCreator(){
+	        	    var data={"Show":{"CIM.Light.Data.Light":null},"DelResponseData":{"key":"Message.Value.Show.Result.LightDef.Action","Value":"all"}}
+			        var http = new XMLHttpRequest();
+			        var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
+			        var params = "SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
+			        http.open("POST", url, true);
+
+					//Send the proper header information along with the request
+					http.setRequestHeader("Content-type", "application/json");
+
+					http.onreadystatechange = function(){//Call a function when the state changes.
+					    if(http.readyState == 4 && http.status == 200){
+					        http.responseText;
+	                        var res =http.responseText;
+							res=JSON.parse(res);
+							iterate(res);
+           	     		}
+			     		
+				    }
+					http.send(JSON.stringify(data));
+                } 
+			    function iterate(obj){
+			    	console.log("object :"+ obj);
+                    for (x in obj) {				
+	                   console.log("  x: "+x);
+                       switch(x){
+                       //   console.log("inside switch :" + x);
+                          case "Double":
+						   console.log("inside double "+obj[x]);
+						   for (y in x) {
+						      if( y == "Name") {
+							     console.log(x[y]);
+                  	    	     output[x[y]] = "";
+							  }    
+                              else if(typeof(obj[y]) == 'object'){	   iterate(obj[y]);
+							  }  
+						  }
+							  break
+						
+						  case "String":
+						   console.log("inside String");
+						     for (y in x) {
+						      if( y == "Name") {
+							     console.log(x[y]);
+                  	    	     output[x[y]] = "";
+							  }    
+                              else if(typeof(x[y]) == 'object'){	   iterate(x[y]);
+							  }  
+						  }
+						    break;
+						  case "DateTime" : 
+						  console.log("inside data time ");
+						      for (y in x) {
+					        	if( y == "Name") {
+							       console.log(x[y]);
+                  	    	       output[x[y]] = "";
+							    }    
+                                else if(typeof(x[y]) == 'object'){
+    							   iterate(x[y]);
+							    }
+                              } 							  
+						     break;
+						  
+						  case 	"Number" :
+						  console.log("inside Number");
+						      for(y in x){
+						        if( y == "Name") {
+                                   console.log(x[y]);							    
+                  	    	       output[x[y]] = "";
+							    }    
+                              else if(typeof(x[y]) == 'xect'){	   iterate(x[y]);
+							  }  
+							  }
+						    break;
+						  case   "Boolean" :
+						  console.log("inside Boolean");
+						      for(y in x){
+						        if( y == "Name") {
+							      console.log(x[y]);
+                  	    	      output[x[y]] = "";
+							  }    
+                              else if(typeof(x[y]) == 'object'){	   iterate(x[y]);
+							  } 
+                           }							  
+						   break;		
+
+                        default :
+                        console.log("inside default");
+						    if(typeof(obj[x]) == 'object'){
+							   console.log("obj[x] :" +obj[x] )
+							   iterate(obj[x]);
+							}
+		               }
+					}
+                }
+			dummyCreator();
+		</script>
+	</Head>
+	<Body>
+	</Body>
+</HTML>
