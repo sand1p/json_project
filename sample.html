@@ -1,0 +1,72 @@
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<title> </title>
+		<script type="text/javascript">
+            val="";
+            arrItr=false;
+			f=function(root, label, op){
+				console.log('abc',root,label,op,typeof(root))
+				if(label !='String' ){
+					if((typeof(root[label]))=='object'){
+						op[label]={};
+						cur=root[label];
+						for ( y in cur){
+							f(cur,y,op[label]);
+							console.log("y :"+y)
+							val=label;
+						}
+					} 
+					else {	
+						console.log('Non object found: '+label);
+						if(arrItr){
+							op[label]=root[label];
+						}
+					
+					}
+				}
+				else {
+					for (a in root[label]){
+						console.log("inside array", "object ",root[label][a],"label",root[label]);
+                         arrItr=true;   
+				         for(b in root[label][a]){
+				            //console.log("attribute in array : ",b,"Value:",root[label][a][b]);
+				            val=root[label][a][b];
+				            //console.log(" object to  pass : ",root[label][a],"label");
+				            
+				            console.log("label: "+JSON.stringify(op));
+				            op[root[label][a][b]]=root[label][a][b];
+				            f(root[label][a],"Name",op[val]); 	
+				         }
+						
+						//op[root[label][a]]=root[label][a]
+					}
+					arrItr=false;
+				}
+			}
+			x={"ae": {  "ProviderDetailsDef": {
+				"String": [
+				{
+					"Name": "provider"
+				},
+				{
+					"Name": "providerId"
+				},
+				{
+					"Name": "OUI"
+				}
+				],
+				"Name": "providerDetails"
+			},"Name": "light"
+		}
+	};
+	console.log("type of x: "+(typeof(x)));
+	var op={};
+	f(x,"ae",op);
+	console.log("result",JSON.stringify(op));
+
+</script>
+</head>
+<body>
+</body>
+</html>>

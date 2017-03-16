@@ -1,0 +1,61 @@
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<title> </title>
+		<script type="text/javascript">
+            val="";
+            op={};
+           function dummyCreator(){
+				 	var data={"Show":{"CIM.Light.Data.Light":null},"DelResponseData":{"key":"Message.Value.Show.Result.LightDef.Action","Value":"all"}}
+				 	var http = new XMLHttpRequest();
+				 	var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
+				 	var params = "SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
+				 	http.open("POST", url, true);
+
+					//Send the proper header information along with the request
+					http.setRequestHeader("Content-type", "application/json");
+
+					http.onreadystatechange = function(){//Call a function when the state changes.
+						if(http.readyState == 4 && http.status == 200){
+							http.responseText;
+							var res =http.responseText;
+							console.log("json "+res)
+							res=JSON.parse(res);
+
+							f(res,"Show",op);
+       						console.log("output :"+JSON.stringify(op));
+						}
+
+					}
+					http.send(JSON.stringify(data));
+				} 
+
+			f=function(root, label, op){
+
+				console.log('abc',root,label,op,typeof(root))
+				if((typeof(root[label]))=='object'){
+						op[label]={};
+						console.log("op : "+op)
+						cur=root[label];
+						for ( y in cur){
+
+							f(cur,y,op[label]);
+							console.log("y :"+y);
+							val=label;
+						}
+				} 
+				else {	
+						op[label]=root[label];
+				}
+				console.log("result",JSON.stringify(op));
+			}
+		
+
+	dummyCreator()
+	console.log("result",JSON.stringify(op));
+
+</script>
+</head>
+<body>
+</body>
+</html>>

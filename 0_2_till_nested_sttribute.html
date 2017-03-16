@@ -1,6 +1,6 @@
 /**
 This is a html file which contains javascript 
-ehich is used to parse json and retrieve relevant attributes.
+hich is used to parse json and retrieve relevant attributes.
 
 */
 <HTML>
@@ -9,7 +9,6 @@ ehich is used to parse json and retrieve relevant attributes.
 		<script type="text/javascript">
 			output={};
 			val="";	
-			keyType="";
 			ignore=false;
 			len=1;
 			format=false;
@@ -30,7 +29,8 @@ ehich is used to parse json and retrieve relevant attributes.
 							http.responseText;
 							var res =http.responseText;
 							res=JSON.parse(res);
-							iterate(res,"");
+							iterate(res);
+                            
 							console.log("output :"+JSON.stringify(output));
 						}
 
@@ -38,37 +38,35 @@ ehich is used to parse json and retrieve relevant attributes.
 					http.send(JSON.stringify(data));
 				} 
 				
-				function iterate(obj,keyType){
+				function iterate(obj){
 
 					for (x in obj) {
 
 						switch (x){
 
 							case "Double" : 
-							keyType = "Double";
-							iterate(obj[x],keyType) ;
+							iterate(obj[x]) ;
 							break;								
 
 							case "String" :
-							keyType = "String";
-							iterate(obj[x],keyType) ;
+							iterate(obj[x]) ;
 							break;
 
-							case "DateTime" : 
-							keyType = "DateTime";
-							iterate(obj[x],keyType) ;
+							case "DateTime" :
+							iterate(obj[x]) ;
 							break;
 
 							case "Boolean" :
-							keyType = "Boolean";   
-							iterate(obj[x],keyType) ;
+								iterate(obj[x]) ;
 							break;
 
 
 							case "Number" :
-							keyType = "Number";
-							iterate(obj[x],keyType) ;
+							iterate(obj[x]) ;
 							break;
+
+
+//Done
 
 							case "Name" : 
 							if(!ignore){
@@ -123,6 +121,8 @@ ehich is used to parse json and retrieve relevant attributes.
                              break;
 
 							default :
+
+
 							if(typeof(obj[x]) == 'object'){
 								if(x=="Default" || x=="ReadOnly" || x=="Constant" || x=="Eq" ) { 
                                            ignore=true;  
@@ -131,7 +131,7 @@ ehich is used to parse json and retrieve relevant attributes.
                                            }                      	 
                                        }
                                        else {
-					                 	iterate(obj[x],keyType);  
+					                 	iterate(obj[x]);  
 					                 }
 					             }
 

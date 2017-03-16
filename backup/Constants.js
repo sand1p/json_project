@@ -1,0 +1,9 @@
+output={"create": { } };
+len=0;
+val="";
+dataValue="";
+nameVal=Array(15);
+index=0;
+objectFormat=false;
+cardinality=false;
+ignore=false;
