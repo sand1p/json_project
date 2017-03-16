@@ -1,0 +1,103 @@
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\script.js"> </script>
+		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\JsonRestClient.js"> </script>
+		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\Constants.js"> </script>
+		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\CardinalityChecker.js"> </script>
+		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\FormatSelector.js"> </script>
+		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\DataGenerator.js"> </script>
+
+		<title>Json Parser</title>
+		<script type="text/javascript">
+
+
+			if( typeof Array.isArray !== 'function' ) {
+				Array.isArray = function( arr ) {
+					return Object.prototype.toString.call( arr ) === '[object Array]';
+				};
+
+			}
+			modelName=getParameterByName("firstname",window.location.search);
+			console.log("modelName:",modelName)
+			
+			function iterate(root,label,op){
+				console.log("label : ",label );
+				for(x in root){
+					console.log("values of x :"+ x ) 
+
+					if(ignorable.includes(x)){
+						cardinality=false;
+						ignore=true;
+						continue;
+					}
+					if(x =='Cardinality'){
+						len=cardinalityChecker(root,x);
+						cardinality=true;
+
+					}
+					else if(x=='Format') {
+						objectFormat=formatSelector(root,x);
+					}
+					else if(dataTypes.includes(x)){
+						dataValue=dataGenerator(x);
+						if(Array.isArray(root[x])){
+							n=root[x].length;
+							val=x;
+							for(i=0;i<n;i++){	
+								console.log("all objects inside literals :",root[x][i]);								      
+								iterate(root[val][i],label,op);
+							}
+						}
+						else if(Object.prototype.toString.call(root[x])==='[object Object]'){
+							iterate(root[x],label,op);
+						}
+
+					}
+					else if(x=='Name'){
+						if(!ignore && !nameVal.includes(root[x])){
+							if(cardinality){
+								arr=Array(len)
+								for(keys=0;keys<len;keys++){
+									arr[keys]="key";
+								}  
+								op[root[x]]=arr;
+								cardinality=false;
+							}else if(objectFormat){
+								op[root[x]]={"key":"value"};
+								objectFormat=false;
+							}else{ 
+								if(val=='String' && !root[x].includes('Light')){
+									op[root[x]]=root[x];
+								}else {
+
+									op[root[x]]=dataValue;
+								}
+							}
+						}
+						else{
+							ignore=false;
+						}
+					}
+					else if(Object.prototype.toString.call(root[x]) ==='[object Object]'){
+						if(root[x].Name!='undefined'){
+							op[root[x].Name]={};
+							nameVal[index]=root[x].Name;
+							index++;
+							iterate(root[x],root[x].Name,op[root[x].Name])
+						}
+					}else if(Array.isArray(root[x])){
+						m=root[x].length;
+						for(j=0;j<m;j++){
+							console.log("array values : ",root[x][j]);
+							iterate(root[x][j],label,op)
+						}
+					}
+				}
+			}	
+			dummyCreator();
+		</script>
+	</head>
+	<body>
+	</body>
+	</html>
