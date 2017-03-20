@@ -1,7 +1,7 @@
 	<!DOCTYPE html>
 	<html>
 	<head>
-	<!-- <script type="text/javascript" src="C:\inetpub\wwwroot\cdp\backup\script.js"> </script> -->
+		<!-- <script type="text/javascript" src="C:\inetpub\wwwroot\cdp\backup\script.js"> </script> -->
 		<title>Json Parser</title>
 		<script type="text/javascript">
 
@@ -26,7 +26,7 @@
 
 
 			modelName=getParameterByName("firstname",window.location.search);
-            console.log("modelName:",modelName)
+			console.log("modelName:",modelName)
 			output={"create": { } };
 			len=0;
 			val="";
@@ -38,16 +38,15 @@
 			ignore=false;
 			function dummyCreator(){
 				var data={};
-                if(modelName=='LightModel'){
-                    data["Show"]={};
-                    data["Show"]["CIM.Light.Data.Light"]=null;
-                }
-                data["SetResponse"]={};
-                data["SetResponse"]["Message"]={};
-                data["SetResponse"]["Message"]["Value"]={}
-                data["SetResponse"]["Message"]["Value"]["Include"]="$Response.Message.Value.Show.Result/*/*[name()!='Action']"
-                JSON.stringify(data);
-               
+
+				data["Show"]={};
+				data["Show"][modelName]=null;
+				data["SetResponse"]={};
+				data["SetResponse"]["Message"]={};
+				data["SetResponse"]["Message"]["Value"]={}
+				data["SetResponse"]["Message"]["Value"]["Include"]="$Response.Message.Value.Show.Result/*/*[name()!='Action']"
+				JSON.stringify(data);
+
 				console.log("data :", data);
 				var http = new XMLHttpRequest();
 				var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
@@ -175,9 +174,10 @@
 								}
 							}else if(Array.isArray(root[x])){
 								m=root[x].length;
+								valx=x;
 								for(j=0;j<m;j++){
-									console.log("array values : ",root[x][j]);
-									iterate(root[x][j],label,op)
+									console.log("array values : ",root[valx][j]);
+									iterate(root[valx][j],label,op)
 								}
 							}
 						}

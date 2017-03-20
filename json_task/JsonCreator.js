@@ -11,14 +11,11 @@ function jsonCreator(nameVal,root,x,op){
 			op[root[x]]={"key":"value"};
 			objectFormat=false;
 		}else{ 
-
 			if(val=='String'){
 				op[root[x]]=root[x];
 			}else {
-
 				op[root[x]]=dataValue;
 			}
-
 		}
 	}
 	else{

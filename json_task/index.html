@@ -7,22 +7,24 @@
 		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\CardinalityChecker.js"> </script>
 		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\FormatSelector.js"> </script>
 		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\DataGenerator.js"> </script>
-
+		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\bodyCreator.js"> </script>
 		<title>Json Parser</title>
 		<script type="text/javascript">
-
-
 			if( typeof Array.isArray !== 'function' ) {
 				Array.isArray = function( arr ) {
 					return Object.prototype.toString.call( arr ) === '[object Array]';
 				};
-
+			}
+			if(typeof Object.isObject !=='function'){
+				Object.isObject =function(object){
+					return Object.prototype.toString.call(object) ==='[object Object]'
+				};
 			}
 			modelName=getParameterByName("firstname",window.location.search);
-			console.log("modelName:",modelName)
+			console.log("modelName:",modelName);
 			
 			function iterate(root,label,op){
-				console.log("label : ",label );
+				console.log("label : ",label);
 				for(x in root){
 					console.log("values of x :"+ x ) 
 
@@ -59,18 +61,19 @@
 							if(cardinality){
 								arr=Array(len)
 								for(keys=0;keys<len;keys++){
-									arr[keys]="key";
+									arr[keys]=root[x]+(keys+1);
 								}  
 								op[root[x]]=arr;
 								cardinality=false;
 							}else if(objectFormat){
-								op[root[x]]={"key":"value"};
+								key=root[x];
+								op[root[x]]={};
+								//op[root[x]][root[x]]=root[x];
 								objectFormat=false;
-							}else{ 
-								if(val=='String' && !root[x].includes('Light')){
+							}else if(root[x]!=modelName){ 
+								if(val=='String'){
 									op[root[x]]=root[x];
 								}else {
-
 									op[root[x]]=dataValue;
 								}
 							}
@@ -79,25 +82,31 @@
 							ignore=false;
 						}
 					}
-					else if(Object.prototype.toString.call(root[x]) ==='[object Object]'){
-						if(root[x].Name!='undefined'){
-							op[root[x].Name]={};
-							nameVal[index]=root[x].Name;
-							index++;
-							iterate(root[x],root[x].Name,op[root[x].Name])
-						}
-					}else if(Array.isArray(root[x])){
-						m=root[x].length;
-						for(j=0;j<m;j++){
-							console.log("array values : ",root[x][j]);
-							iterate(root[x][j],label,op)
+					else if(x=='sid'){
+						op[x]='sid';
+
+					}
+					else if(Object.isObject(root[x]))//if(Object.prototype.toString.call(root[x]) ==='[object Object]'){
+						{
+							if(root[x].Name!='undefined'){
+								op[root[x].Name]={};
+								nameVal[index]=root[x].Name;
+								index++;
+								iterate(root[x],root[x].Name,op[root[x].Name])
+							}
+						}else if(Array.isArray(root[x])){
+							m=root[x].length;
+							valx=x;
+							for(j=0;j<m;j++){
+								console.log("array values : ",root[valx][j]);
+								iterate(root[valx][j],label,op)
+							}
 						}
 					}
-				}
-			}	
-			dummyCreator();
-		</script>
-	</head>
-	<body>
-	</body>
-	</html>
+				}	
+				dummyCreator(modelName);
+			</script>
+		</head>
+		<body>
+		</body>
+		</html>

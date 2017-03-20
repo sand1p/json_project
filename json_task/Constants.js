@@ -1,8 +1,10 @@
 output={"create": { } };
+modelName="";
 len=0;
 val="";
 dataValue="";
 nameVal=Array(15);
+//nameVal[0]=;
 index=0;
 objectFormat=false;
 cardinality=false;
@@ -45,4 +47,11 @@ function getLen(){
 
 function setLen(len){
 	len=len;
+}
+function getOutput(){
+     return output;
+}
+
+function setOutput(output){
+   output=output;
 }

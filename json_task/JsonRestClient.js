@@ -1,15 +1,6 @@
-function dummyCreator(){
-	var data={};
-	if(modelName=='LightModel'){
-		data["Show"]={};
-		data["Show"]["CIM.Light.Data.Light"]=null;
-	}
-	data["SetResponse"]={};
-	data["SetResponse"]["Message"]={};
-	data["SetResponse"]["Message"]["Value"]={}
-	data["SetResponse"]["Message"]["Value"]["Include"]="$Response.Message.Value.Show.Result/*/*[name()!='Action']"
-	JSON.stringify(data);
-	
+
+function dummyCreator(modelName){
+	data=bodyCreator(modelName);
 	console.log("data :", data);
 	var http = new XMLHttpRequest();
 	var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
@@ -25,6 +16,7 @@ function dummyCreator(){
 								var res =http.responseText;
 								res=JSON.parse(res);
 								console.log("result :",res);
+								output={"create": { } };
 								iterate(res,"Show",output["create"]);
 								console.log("output :"+JSON.stringify(output));
 							}
