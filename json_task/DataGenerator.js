@@ -3,7 +3,7 @@ function dataGenerator(val){
 	if(val=='Double'){
 		dataValue=45.454;
 	}else if(val=='Number'){
-		dataValue=345
+		dataValue=345;
 	}
 	else if(val=='Boolean'){
 		dataValue=true;  

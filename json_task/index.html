@@ -8,7 +8,9 @@
 		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\FormatSelector.js"> </script>
 		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\DataGenerator.js"> </script>
 		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\bodyCreator.js"> </script>
+		<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\NestedCreator.js"> </script>
 		<title>Json Parser</title>
+
 		<script type="text/javascript">
 			if( typeof Array.isArray !== 'function' ) {
 				Array.isArray = function( arr ) {
@@ -24,9 +26,10 @@
 			console.log("modelName:",modelName);
 			
 			function iterate(root,label,op){
-				console.log("label : ",label);
+				console.log("label: ",label);
+
 				for(x in root){
-					console.log("values of x :"+ x ) 
+					console.log("values of x:"+ x ) 
 
 					if(ignorable.includes(x)){
 						cardinality=false;
@@ -36,25 +39,40 @@
 					if(x =='Cardinality'){
 						len=cardinalityChecker(root,x);
 						cardinality=true;
-
 					}
 					else if(x=='Format') {
-						objectFormat=formatSelector(root,x);
+						objectFormat=formatSelector(root,x,objectFormat);
 					}
 					else if(dataTypes.includes(x)){
 						dataValue=dataGenerator(x);
 						if(Array.isArray(root[x])){
 							n=root[x].length;
 							val=x;
-							for(i=0;i<n;i++){	
-								console.log("all objects inside literals :",root[x][i]);								      
-								iterate(root[val][i],label,op);
-							}
+							objArray=[];
+							strObj={};
+							if(cardinality){
+								for(arrLen=0;arrLen<len;arrLen++){
+									strObj={};
+									for(i=0;i<n;i++){	  
+										if(dataValue!=''){
+											strObj[root[val][i].Name]=dataValue;
+										}else {
+											strObj[root[val][i].Name]=root[val][i].Name;
+										}
+									}
+									objArray[arrLen]=strObj;
+								}
+								op[label]=objArray;	
+								cardinality=false;
+							}else {
+								for(i=0;i<n;i++){	   
+									iterate(root[val][i],label,op);
+								}
+							}	
 						}
-						else if(Object.prototype.toString.call(root[x])==='[object Object]'){
+						else if(Object.isObject(root[x])){
 							iterate(root[x],label,op);
 						}
-
 					}
 					else if(x=='Name'){
 						if(!ignore && !nameVal.includes(root[x])){
@@ -70,6 +88,9 @@
 								op[root[x]]={};
 								//op[root[x]][root[x]]=root[x];
 								objectFormat=false;
+							}else if(nesting){
+								op[root[x]]=nestedJson;
+								nesting=false;
 							}else if(root[x]!=modelName){ 
 								if(val=='String'){
 									op[root[x]]=root[x];
@@ -86,27 +107,49 @@
 						op[x]='sid';
 
 					}
-					else if(Object.isObject(root[x]))//if(Object.prototype.toString.call(root[x]) ==='[object Object]'){
-						{
-							if(root[x].Name!='undefined'){
-								op[root[x].Name]={};
-								nameVal[index]=root[x].Name;
-								index++;
+					else if(Object.isObject(root[x])){//if(Object.prototype.toString.call(root[x]) ==='[object Object]'){
+						
+						if(root[x].Name!=undefined){
+							op[root[x].Name]={};
+							nameVal[index]=root[x].Name;
+							index++;
+							if(root[x].Cardinality!=undefined){
+								iterate(root[x],root[x].Name,op)
+							}else {
 								iterate(root[x],root[x].Name,op[root[x].Name])
 							}
-						}else if(Array.isArray(root[x])){
-							m=root[x].length;
-							valx=x;
+						}
+					}else if(Array.isArray(root[x])){
+						m=root[x].length;
+						valx=x;
+
+						if(root[x].Name!=undefined){
+
+							op[root[x].Name]={};
+							nameVal[index]=root[x].Name;
+							index++;
+							for(j=0;j<m;j++){
+								console.log("array values : ",root[valx][j]);
+								iterate(root[valx][j],label,op[root[valx].Name])
+							}
+						}
+						else {
 							for(j=0;j<m;j++){
 								console.log("array values : ",root[valx][j]);
 								iterate(root[valx][j],label,op)
 							}
 						}
 					}
-				}	
-				dummyCreator(modelName);
-			</script>
-		</head>
-		<body>
-		</body>
-		</html>
+					else if(x=='Value'){
+						nestedModelName=root[x];
+						nestedJson=nestedCreator(nestedModelName);
+						nesting =true;
+					}
+				}
+			}	
+			dummyCreator(modelName);
+		</script>
+	</head>
+	<body>
+	</body>
+	</html>

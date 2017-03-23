@@ -1,10 +1,12 @@
 output={"create": { } };
 modelName="";
+nestedJson={};
 len=0;
 val="";
 dataValue="";
 nameVal=Array(15);
 //nameVal[0]=;
+nesting=false;
 index=0;
 objectFormat=false;
 cardinality=false;
