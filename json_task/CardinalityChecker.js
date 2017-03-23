@@ -15,6 +15,7 @@ function cardinalityChecker(root,x){
 		len=2;
 	}else {
 		len=1
+		
 	}
 	cardinality=true;
 	return len;

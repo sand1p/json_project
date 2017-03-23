@@ -17,8 +17,15 @@ function dummyCreator(modelName){
 			var res =http.responseText;
 			res=JSON.parse(res);
 			console.log("result :",res);
-			iterate(res,"Show",output["create"]);
+			if(res["Name"] !='undefined'){
+				output["create"]={};
+				output["create"]["Name"]={}
+				iterate(res,res["Name"],output["create"]["Name"]);
+			}else {
+				iterate(res,"Show",output["create"]);
+			}
 			console.log("output :"+JSON.stringify(output));
+
 		}
 
 	}

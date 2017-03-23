@@ -45,9 +45,9 @@
 					}
 					else if(dataTypes.includes(x)){
 						dataValue=dataGenerator(x);
+						val=x;
 						if(Array.isArray(root[x])){
 							n=root[x].length;
-							val=x;
 							objArray=[];
 							strObj={};
 							if(cardinality){
@@ -65,8 +65,16 @@
 								op[label]=objArray;	
 								cardinality=false;
 							}else {
-								for(i=0;i<n;i++){	   
-									iterate(root[val][i],label,op);
+								if(root[x].Name != undefined){
+									op[root[x].Name]={}
+
+									for(i=0;i<n;i++){	   
+										iterate(root[val][i],label,op[root[x].Name]);
+									}	
+								}else {
+									for(i=0;i<n;i++){	   
+										iterate(root[val][i],label,op);
+									}
 								}
 							}	
 						}
@@ -75,7 +83,7 @@
 						}
 					}
 					else if(x=='Name'){
-						if(!ignore && !nameVal.includes(root[x])){
+						if(!ignore && root[x]!=""){
 							if(cardinality){
 								arr=Array(len)
 								for(keys=0;keys<len;keys++){
@@ -101,6 +109,8 @@
 						}
 						else{
 							ignore=false;
+							cardinality=false;
+							objectFormat=false;
 						}
 					}
 					else if(x=='sid'){
@@ -110,13 +120,18 @@
 					else if(Object.isObject(root[x])){//if(Object.prototype.toString.call(root[x]) ==='[object Object]'){
 						
 						if(root[x].Name!=undefined){
-							op[root[x].Name]={};
-							nameVal[index]=root[x].Name;
-							index++;
+							parentTagName=root[x].Name;
+							op[parentTagName]={};
+
+							/*nameVal[index]=root[x].Name;
+							index++;*/
 							if(root[x].Cardinality!=undefined){
-								iterate(root[x],root[x].Name,op)
+								len=cardinalityChecker(root,x);
+								cardinality=true;
+								iterate(root[x],parentTagName,op)
 							}else {
-								iterate(root[x],root[x].Name,op[root[x].Name])
+								root[x].Name="";
+								iterate(root[x],parentTagName,op[parentTagName])
 							}
 						}
 					}else if(Array.isArray(root[x])){
@@ -124,32 +139,44 @@
 						valx=x;
 
 						if(root[x].Name!=undefined){
-
-							op[root[x].Name]={};
-							nameVal[index]=root[x].Name;
-							index++;
+							parentTagName=root[valx].Name;
+							op[parentTagName]={};
+							/*nameVal[index]=root[x].Name;
+							index++;*/
+							root[x].Name="";
 							for(j=0;j<m;j++){
 								console.log("array values : ",root[valx][j]);
-								iterate(root[valx][j],label,op[root[valx].Name])
+								iterate(root[valx][j],label,op[parentTagName])
 							}
 						}
 						else {
 							for(j=0;j<m;j++){
 								console.log("array values : ",root[valx][j]);
-								iterate(root[valx][j],label,op)
-							}
+								if(root[valx][j].Name!=undefined){
+									parentTagName=root[valx][j].Name
+									op[parentTagName]={};
+							/*		nameVal[index]=root[valx][j].Name;
+							index++;*/
+							root[valx][j].Name="";
+							iterate(root[valx][j],parentTagName,op[parentTagName]);
+						}
+						else {
+							iterate(root[valx][j],label,op)
 						}
 					}
-					else if(x=='Value'){
-						nestedModelName=root[x];
-						nestedJson=nestedCreator(nestedModelName);
-						nesting =true;
-					}
 				}
-			}	
-			dummyCreator(modelName);
-		</script>
-	</head>
-	<body>
-	</body>
-	</html>
+			}
+
+			else if(x=='Value'){
+				nestedModelName=root[x];
+				nestedJson=nestedCreator(nestedModelName);
+				nesting =true;
+			}
+		}
+	}	
+	dummyCreator(modelName);
+</script>
+</head>
+<body>
+</body>
+</html>

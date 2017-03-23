@@ -1,17 +1,18 @@
 output={"create": { } };
 modelName="";
 nestedJson={};
+parentTagName="";
 len=0;
 val="";
 dataValue="";
-nameVal=Array(15);
-//nameVal[0]=;
-nesting=false;
+nameVal=Array(15000);
 index=0;
+nesting=false;
+
 objectFormat=false;
 cardinality=false;
 ignore=false;
-dataTypes=['String','Double','DateTime','Boolean','Number']
+dataTypes=['String','Double','DateTime','Boolean','Number','Integer']
 ignorable=['Default',"ReadOnly","Constant","Eq","Transient"]
 
 function getObjectFormat(){
