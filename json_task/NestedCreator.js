@@ -15,11 +15,11 @@ function nestedCreator(nestedModelName){
 			res=JSON.parse(res);
 			console.log("nested  result :",res);
 			if(res["Name"]!=undefined){
-				nestedOutput[res["Name"]]={};
-				nameVal[index]=res["Name"];
-				index++;
+				parentTagName=res["Name"];
+				nestedOutput[parentTagName]={};
+			    res["Name"]="";
 				//nesting=true;
-				iterate(res,res["Name"],nestedOutput[res["Name"]]);
+				iterate(res,parentTagName,nestedOutput[parentTagName]);
 			}else {
 			    iterate(res,"",nestedOutput);
 			}

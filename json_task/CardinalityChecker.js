@@ -14,7 +14,7 @@ function cardinalityChecker(root,x){
 	}else if(root[x][0]==1){
 		len=2;
 	}else {
-		len=1
+		len=2
 		
 	}
 	cardinality=true;

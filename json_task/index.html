@@ -12,43 +12,28 @@
 		<title>Json Parser</title>
 
 		<script type="text/javascript">
-			if( typeof Array.isArray !== 'function' ) {
-				Array.isArray = function( arr ) {
-					return Object.prototype.toString.call( arr ) === '[object Array]';
-				};
-			}
-			if(typeof Object.isObject !=='function'){
-				Object.isObject =function(object){
-					return Object.prototype.toString.call(object) ==='[object Object]'
-				};
-			}
 			modelName=getParameterByName("firstname",window.location.search);
-			console.log("modelName:",modelName);
-			
+
 			function iterate(root,label,op){
-				console.log("label: ",label);
-
 				for(x in root){
-					console.log("values of x:"+ x ) 
-
 					if(ignorable.includes(x)){
 						cardinality=false;
 						ignore=true;
 						continue;
 					}
-					if(x =='Cardinality'){
+					if(x == 'Cardinality' && root[x]!=""){
 						len=cardinalityChecker(root,x);
 						cardinality=true;
 					}
-					else if(x=='Format') {
+					else if(x =='Format') {
 						objectFormat=formatSelector(root,x,objectFormat);
 					}
 					else if(dataTypes.includes(x)){
 						dataValue=dataGenerator(x);
-						val=x;
+						val=x; 
+						
 						if(Array.isArray(root[x])){
 							n=root[x].length;
-							objArray=[];
 							strObj={};
 							if(cardinality){
 								for(arrLen=0;arrLen<len;arrLen++){
@@ -56,24 +41,24 @@
 									for(i=0;i<n;i++){	  
 										if(dataValue!=''){
 											strObj[root[val][i].Name]=dataValue;
-										}else {
+										} else {
 											strObj[root[val][i].Name]=root[val][i].Name;
 										}
 									}
 									objArray[arrLen]=strObj;
 								}
-								op[label]=objArray;	
-								cardinality=false;
+								op=objArray;
 							}else {
 								if(root[x].Name != undefined){
-									op[root[x].Name]={}
-
-									for(i=0;i<n;i++){	   
-										iterate(root[val][i],label,op[root[x].Name]);
+									parentTagName=root[x].Name;
+									op[parentTagName]={};
+									root[x].Name="";
+									for(p=0;p<n;p++){	   
+										iterate(root[val][p],label,op[parentTagName]);
 									}	
 								}else {
-									for(i=0;i<n;i++){	   
-										iterate(root[val][i],label,op);
+									for(q=0;q<n;q++){	   
+										iterate(root[val][q],label,op);
 									}
 								}
 							}	
@@ -82,6 +67,7 @@
 							iterate(root[x],label,op);
 						}
 					}
+
 					else if(x=='Name'){
 						if(!ignore && root[x]!=""){
 							if(cardinality){
@@ -94,7 +80,6 @@
 							}else if(objectFormat){
 								key=root[x];
 								op[root[x]]={};
-								//op[root[x]][root[x]]=root[x];
 								objectFormat=false;
 							}else if(nesting){
 								op[root[x]]=nestedJson;
@@ -117,66 +102,72 @@
 						op[x]='sid';
 
 					}
-					else if(Object.isObject(root[x])){//if(Object.prototype.toString.call(root[x]) ==='[object Object]'){
-						
+					else if(Object.isObject(root[x])){
 						if(root[x].Name!=undefined){
 							parentTagName=root[x].Name;
-							op[parentTagName]={};
-
-							/*nameVal[index]=root[x].Name;
-							index++;*/
+                            root[x].Name=""; 
 							if(root[x].Cardinality!=undefined){
+								nesVal=x;
+								rootTagName=parentTagName;
 								len=cardinalityChecker(root,x);
-								cardinality=true;
-								iterate(root[x],parentTagName,op)
-							}else {
-								root[x].Name="";
-								iterate(root[x],parentTagName,op[parentTagName])
-							}
+								root[x].Cardinality="";
+								cardinality=false;
+								nestedCardinality=true;
+                                 nesArray=Array(len);
+                                 for(r=0;r<len;r++){
+                                 	nesArray[r]={}
+                                 }
+                                 iterate(root[nesVal],parentTagName,nesArray[0]);
+                                 if(len==2){
+                                 	nesArray[1]=nesArray[0];
+                                 }     
+                                 console.log("nested Array :",JSON.stringify(nesArray));
+
+                                 op[rootTagName]=nesArray; 
+								nestedCardinality=false;
+							} else {
+						        op[parentTagName]={};
+						     	iterate(root[x],parentTagName,op[parentTagName]);
+						    }
 						}
 					}else if(Array.isArray(root[x])){
 						m=root[x].length;
 						valx=x;
-
 						if(root[x].Name!=undefined){
 							parentTagName=root[valx].Name;
 							op[parentTagName]={};
-							/*nameVal[index]=root[x].Name;
-							index++;*/
-							root[x].Name="";
 							for(j=0;j<m;j++){
 								console.log("array values : ",root[valx][j]);
-								iterate(root[valx][j],label,op[parentTagName])
+							    root[x].Name=""; 
+								iterate(root[valx][j],label,op[parentTagName]);
 							}
 						}
 						else {
 							for(j=0;j<m;j++){
 								console.log("array values : ",root[valx][j]);
 								if(root[valx][j].Name!=undefined){
-									parentTagName=root[valx][j].Name
+									parentTagName=root[valx][j].Name;
 									op[parentTagName]={};
-							/*		nameVal[index]=root[valx][j].Name;
-							index++;*/
-							root[valx][j].Name="";
-							iterate(root[valx][j],parentTagName,op[parentTagName]);
-						}
-						else {
-							iterate(root[valx][j],label,op)
+									root[valx][j].Name="";
+									iterate(root[valx][j],parentTagName,op[parentTagName]);
+								}
+								else {
+									iterate(root[valx][j],label,op);
+								}
+							}
 						}
 					}
-				}
-			}
 
-			else if(x=='Value'){
-				nestedModelName=root[x];
-				nestedJson=nestedCreator(nestedModelName);
-				nesting =true;
-			}
-		}
-	}	
-	dummyCreator(modelName);
-</script>
-</head>
-<body>
-</body>
-</html>
+					else if(x=='Value'){
+						nestedModelName=root[x];
+						nestedJson=nestedCreator(nestedModelName);
+						nesting =true;
+					}
+				}
+			}	
+			dummyCreator(modelName);
+		</script>
+	</head>
+	<body>
+	</body>
+	</html>
