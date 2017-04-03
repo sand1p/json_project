@@ -1,6 +1,6 @@
 function nestedCreator(nestedModelName){
- data=bodyCreator(nestedModelName);
- nestedOutput={}
+	data=bodyCreator(nestedModelName);
+	nestedOutput={}
 	console.log("data :", data);
 	var http = new XMLHttpRequest();
 	var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
@@ -14,17 +14,43 @@ function nestedCreator(nestedModelName){
 			var res =http.responseText;
 			res=JSON.parse(res);
 			console.log("nested  result :",res);
-			if(res["Name"]!=undefined){
-				parentTagName=res["Name"];
-				nestedOutput[parentTagName]={};
-			    res["Name"]="";
-				//nesting=true;
-				iterate(res,parentTagName,nestedOutput[parentTagName]);
-			}else {
-			    iterate(res,"",nestedOutput);
-			}
-			console.log("nested output :"+JSON.stringify(nestedOutput));
-			return nestedOutput;
+			//if(flag==0){
+				if(res["Name"]!=undefined){
+					parentTagName=res["Name"];
+					nestedOutput[parentTagName]={};
+					res["Name"]="";
+				    //nesting=true;
+				    iterate(res,parentTagName,nestedOutput[parentTagName]);
+
+				    /*if(isEmpty(nestedOutput[parentTagName])){
+				    	dataArr=nestedModelName.split(".");
+				    	flag=1;
+				    	nestedOutput[parentTagName]=nestedCreator(dataArr[0]);
+				    }
+*/				}else {
+					iterate(res,"",nestedOutput);
+				}
+				console.log("nested output :"+JSON.stringify(nestedOutput));
+				//alert("sdfdsfsdfsd");
+			    document.getElementById("myTextArea").value =JSON.stringify(nestedOutput);
+			    return nestedOutput;
+			//}
+			/*else {
+                for(x in res){
+                	if(dataTypes.includes(x)){
+                		dataValue=dataGenerator(x);
+            	  		if(Array.isArray(res[x])){
+                             arrLength=res[x].Length;
+                             for(i=0;i<arrLength;i++){
+                                if(){
+                                    
+                              	}
+                            }
+            	  		}
+            	    }       
+                }
+				flag=0;
+			}*/
 		}
 	}
 	http.send(JSON.stringify(data));

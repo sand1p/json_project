@@ -3,7 +3,6 @@ modelName="";
 nestedJson={};
 nestedObj={};
 parentTagName="";
-len=0;
 val="";
 objArray=[];
 nesArray=null;
@@ -11,7 +10,7 @@ dataValue="";
 nameVal=Array(15000);
 index=0;
 nesting=false;
-
+flag=0;
 objectFormat=false;
 cardinality=false;
 nestedCardinality=false;
@@ -28,6 +27,15 @@ if(typeof Object.isObject !=='function'){
 	Object.isObject =function(object){
 		return Object.prototype.toString.call(object) ==='[object Object]'
 	};
+}
+
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return JSON.stringify(obj) === JSON.stringify({});
 }
 
 function getObjectFormat(){

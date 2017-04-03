@@ -17,14 +17,15 @@ function dummyCreator(modelName){
 			var res =http.responseText;
 			res=JSON.parse(res);
 			console.log("result :",res);
-			if(res["Name"] !='undefined'){
+			if(res.Name !='undefined'){
 				output["create"]={};
-				output["create"]["Name"]={}
-				iterate(res,res["Name"],output["create"]["Name"]);
+				output["create"][res.Name]={}
+				iterate(res,res["Name"],output["create"][res.Name]);
 			}else {
 				iterate(res,"Show",output["create"]);
 			}
 			console.log("output :"+JSON.stringify(output));
+			
 
 		}
 

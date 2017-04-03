@@ -12,18 +12,17 @@
 		<title>Json Parser</title>
 
 		<script type="text/javascript">
-			modelName=getParameterByName("firstname",window.location.search);
-
+			modelName=getParameterByName("modelName",window.location.search);
 			function iterate(root,label,op){
+				 //if(ignorable.includesroot.)
 				for(x in root){
 					if(ignorable.includes(x)){
 						cardinality=false;
 						ignore=true;
 						continue;
 					}
-					if(x == 'Cardinality' && root[x]!=""){
-						len=cardinalityChecker(root,x);
-						cardinality=true;
+					if(x == 'Cardinality' && root[x]!="" && !ignore){
+						len1=cardinalityChecker(root,x);
 					}
 					else if(x =='Format') {
 						objectFormat=formatSelector(root,x,objectFormat);
@@ -36,7 +35,7 @@
 							n=root[x].length;
 							strObj={};
 							if(cardinality){
-								for(arrLen=0;arrLen<len;arrLen++){
+								for(arrLen=0;arrLen<len1;arrLen++){
 									strObj={};
 									for(i=0;i<n;i++){	  
 										if(dataValue!=''){
@@ -169,5 +168,9 @@
 		</script>
 	</head>
 	<body>
+
+		<div>   
+		<textarea name="uiOutput" id="myTextArea" rows="100" cols="100"></textarea>
+		</div>
 	</body>
 	</html>

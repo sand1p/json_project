@@ -1,22 +1,22 @@
 function cardinalityChecker(root,x){
 	if(Array.isArray(root[x])){
-		len=root[x].length;   
+		arrLen=root[x].Length;   
 
-		if( root[x][len-1][0] ==1){
-			len=2 ;
+		if( root[x][arrLen-1][0] ==1){
+			arrLen=2 ;
 		} 
-		else if(root[x][len-1][0] ==0){
-			len=1; 
+		else if(root[x][arrLen-1][0] ==0){
+			arrLen=1; 
 		}
 	}
-	else if(root[x].length==1){
-		len=1;
+	else if(root[x].arrLength==1){
+		arrLen=1;
 	}else if(root[x][0]==1){
-		len=2;
+		arrLen=2;
 	}else {
-		len=2
+		arrLen=2
 		
 	}
 	cardinality=true;
-	return len;
+	return arrLen;
 }
