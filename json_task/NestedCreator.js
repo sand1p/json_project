@@ -1,56 +1,72 @@
-function nestedCreator(nestedModelName){
+function nestedCreator(nestedModelName,nestedOutput){
 	data=bodyCreator(nestedModelName);
-	nestedOutput={}
 	console.log("data :", data);
 	var http = new XMLHttpRequest();
 	var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
 	var params = "SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
-	http.open("POST", url, true);
+	http.open("POST", url,false);
 	//Send the proper header information along with the request
 	http.setRequestHeader("Content-type", "application/json");
 	http.onreadystatechange = function(){ //Call a function when the state changes.
-		if(http.readyState == 4 && http.status == 200){
+		if(/*http.readyState == 4 && */http.status == 200){
 			http.responseText;
 			var res =http.responseText;
 			res=JSON.parse(res);
 			console.log("nested  result :",res);
-			//if(flag==0){
+			if(flag==0){
 				if(res["Name"]!=undefined){
 					parentTagName=res["Name"];
-					nestedOutput[parentTagName]={};
+					//nestedOutput[parentTagName]={};
 					res["Name"]="";
+					if(res.Format!=undefined){
+						formatSelector(res,"Format");
+						if(dateFormat){
+							dataGenerator("DateTime");
+							 return;
+						}
+					}
 				    //nesting=true;
-				    iterate(res,parentTagName,nestedOutput[parentTagName]);
-
-				    /*if(isEmpty(nestedOutput[parentTagName])){
+				    iterate(res,parentTagName,nestedOutput);
+				    if(isEmpty(nestedOutput)){
 				    	dataArr=nestedModelName.split(".");
 				    	flag=1;
-				    	nestedOutput[parentTagName]=nestedCreator(dataArr[0]);
+				    	nestedCreator(dataArr[0]);
 				    }
-*/				}else {
-					iterate(res,"",nestedOutput);
+				}else {
+				 	iterate(res,"",nestedOutput);
 				}
 				console.log("nested output :"+JSON.stringify(nestedOutput));
-				//alert("sdfdsfsdfsd");
-			    document.getElementById("myTextArea").value =JSON.stringify(nestedOutput);
-			    return nestedOutput;
-			//}
-			/*else {
-                for(x in res){
-                	if(dataTypes.includes(x)){
-                		dataValue=dataGenerator(x);
-            	  		if(Array.isArray(res[x])){
-                             arrLength=res[x].Length;
+			//	document.getElementById("myTextArea").value =JSON.stringify(nestedOutput);
+               return ;
+			}
+			else {
+                for(elem in res){
+                	if(dataTypes.includes(elem)){
+                		dataValue=dataGenerator(elem);
+                		if(Array.isArray(res[elem])){
+                             arrLength=res[elem].length;
+                             nesVal=elem;
                              for(i=0;i<arrLength;i++){
-                                if(){
-                                    
-                              	}
+                                if(res[nesVal][i].Name==parentTagName){
+                                	if(res[nesVal][i].Cardinality!=undefined){
+                                		len=cardinalityChecker(res[nesVal][i],"Cardinality");
+                                		setLen(len);
+                                        cardinality=true;
+                                		setCardinality(true)
+                                	}
+                                	if(res[nesVal][i].Format!=undefined){
+                                		objectFormat=formatSelector(res[nesVal][i],"Format")
+                                		setObjectFormat(true);
+                                	}
+                                	 flag=0;
+                                     return;
+                               	}
                             }
             	  		}
             	    }       
                 }
 				flag=0;
-			}*/
+			}
 		}
 	}
 	http.send(JSON.stringify(data));

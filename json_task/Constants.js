@@ -2,7 +2,7 @@ output={"create": { } };
 modelName="";
 nestedJson={};
 nestedObj={};
-parentTagName="";
+//parentTagName="";
 val="";
 objArray=[];
 nesArray=null;
@@ -12,9 +12,11 @@ index=0;
 nesting=false;
 flag=0;
 objectFormat=false;
+dateFormat=false;
 cardinality=false;
 nestedCardinality=false;
 ignore=false;
+len=0;
 dataTypes=['String','Double','DateTime','Boolean','Number','Integer']
 ignorable=['Default',"ReadOnly","Constant","Eq","Transient","default"]
 
@@ -41,26 +43,34 @@ function isEmpty(obj) {
 function getObjectFormat(){
 	return objectFormat;  
 } 
-function setObjectFormat(objectFormat){
-	objectFormat=objectFormat;
+function setObjectFormat(objectFormatLocal){
+	objectFormat=objectFormatLocal;
 }
+
+function getDateFormat(){
+	return dateFormat;  
+} 
+function setDateFormat(dateFormatLocal){
+	dateFormat=dateFormatLocal;
+}
+
 function getCardinality(){
 	return cardinality;
 }
-function setCardinality(cardinality){
-	cardinality=cardinality;	
+function setCardinality(cardinalityLocal){
+	cardinality=cardinalityLocal;	
 }
 
 function getDataValue(){
 	return dataValue;
 }
 
-function setDataValue(dataValue){
-	dataValue=dataValue;
+function setDataValue(dataValueLocal){
+	dataValue=dataValueLocal;
 }
 
-function setIgnore(ignore){
-	ignore=ignore;
+function setIgnore(ignoreLocal){
+	ignore=ignoreLocal;
 }
 
 function getIgnore(){
@@ -71,13 +81,13 @@ function getLen(){
 	return len;
 }
 
-function setLen(len){
-	len=len;
+function setLen(lenLocal){
+	len=lenLocal;
 }
 function getOutput(){
 	return output;
 }
 
-function setOutput(output){
-	output=output;
+function setOutput(outputLocal){
+	output=outputLocal;
 }
