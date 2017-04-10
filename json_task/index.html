@@ -27,6 +27,12 @@
 				 	else if(x =='Format') {
 				 		objectFormat=formatSelector(root,x);
 				 	}
+				 	else if(x=='Reference'){
+				 		//referenceHandling(root,op);
+				 		if(Array.isArray(root[x])){
+				 		    
+				 		}
+				 	}
 				 	else if(x=='Attribute'){
 				 		if(Array.isArray(root[x])){
 				 			attrLen=root[x].length;
