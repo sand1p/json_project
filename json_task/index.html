@@ -15,14 +15,16 @@
 			modelName=getParameterByName("modelName",window.location.search);
 			function iterate(root,label,op){
 				 //if(ignorable.includesroot.)
+				 setCardinality(false);
 				 for(x in root){
 				 	if(ignorable.includes(x)){
 				 		cardinality=false;
 				 		ignore=true;
-				 		continue;
+				 		continue;	
 				 	}
 				 	if(x == 'Cardinality' && root[x]!="" && !ignore){
 				 		len1=cardinalityChecker(root,x);
+				 		setLen(len1);
 				 	}
 				 	else if(x =='Format') {
 				 		objectFormat=formatSelector(root,x);
@@ -30,7 +32,25 @@
 				 	else if(x=='Reference'){
 				 		//referenceHandling(root,op);
 				 		if(Array.isArray(root[x])){
-				 		    
+				 			parentRef=root[x].Name;
+				 			root[x].Name="";
+				 			op[parentRef]={}
+				 			refLen=root[x].length;
+				 			refVal=x;
+				 			for(ref=0;ref<refLen;ref++){
+				 				if(root[refVal][ref].Name!=undefined){
+				 					op[parentRef][root[refVal][ref].Name]={};
+				 				}
+				 				if(root[refVal][ref].Cardinality!=undefined){
+				 					refArrLen=cardinalityChecker(root[refVal],'Cardinality');
+				 					refArray=Array(refArrLen);
+				 					for(refArr=0;refArr<refArrLen;refArr++){
+				 						refArray[refArr]={};
+				 					}    
+				 					refArrValParent=root[refVal][ref].Name;
+				 					iterate(root[refVal][ref]);
+				 				}
+				 			}
 				 		}
 				 	}
 				 	else if(x=='Attribute'){
@@ -49,8 +69,13 @@
 				 				root[attrVal][attr].Name="";
 				 				op[parentTagName]={};
 				 				iterate(root[attrVal][attr],parentTagName,op[parentTagName]);
+				 			   
 				 				if(isEmpty(op[parentTagName])){
-				 					if(cardinality){
+				 				     
+                                    if(!isEmpty(getNestedOutput()) ){
+                                        op[parentTagName]=nestedOutput;
+                                        setNestedOutput({});
+				 			        }else if(cardinality){
 				 						if(objectFormat){
 				 							arr=Array(len)
 				 							for(keys=0;keys<len;keys++){
@@ -74,83 +99,83 @@
                                    			op[parentTagName]={};
                                    			objectFormat=false;
 
-                                   	} else if(dateFormat){
-                                         op[parentTagName]=dataValue;    
-                                         setDateFormat(false);
-                                   	}
-                                   	else{
-                               			if(dataValue==""){
-                               				op[parentTagName]=parentTagName;
-                               			}else {
-                               				op[parentTagName]=dataValue;
+                                   		} else if(dateFormat){
+                                   			op[parentTagName]=dataValue;    
+                                   			setDateFormat(false);
+                                   		}
+                                   		else{
+                                   			if(dataValue==""){
+                                   				op[parentTagName]=parentTagName;
+                                   			}else {
+                                   				op[parentTagName]=dataValue;
+                                   			}
+                                   		}
+                                   	}  
+                                   	ignore=false;                         } 
+                                   }
+                                }
+                               else if(dataTypes.includes(x)){
+                               	dataValue=dataGenerator(x);
+                               	val=x; 
+                               	if(Array.isArray(root[x])){
+                               		n=root[x].length;
+                               		strObj={};
+                               		if(cardinality){
+                               			for(arrLen=0;arrLen<len1;arrLen++){
+                               				strObj={};
+                               				for(i=0;i<n;i++){	  
+                               					if(dataValue!=''){
+                               						strObj[root[val][i].Name]=dataValue;
+                               					} else {
+                               						strObj[root[val][i].Name]=root[val][i].Name;
+                               					}
+                               					ignore=false;
+                               				}
+                               				objArray[arrLen]=strObj;
                                			}
-                               		}
-                               	}  
-                               	ignore=false;                         } 
-                           }
-                       }
-               		    else if(dataTypes.includes(x)){
-                    	   	dataValue=dataGenerator(x);
-                           	val=x; 
-                           	if(Array.isArray(root[x])){
-                           		n=root[x].length;
-                           		strObj={};
-                           		if(cardinality){
-                           			for(arrLen=0;arrLen<len1;arrLen++){
-                           				strObj={};
-                           				for(i=0;i<n;i++){	  
-                           					if(dataValue!=''){
-                           						strObj[root[val][i].Name]=dataValue;
-                           					} else {
-                           						strObj[root[val][i].Name]=root[val][i].Name;
-                           					}
-                           					ignore=false;
-                           				}
-                           				objArray[arrLen]=strObj;
-                           			}
-                           			op=objArray;
-                           		}else {
-                           			if(root[x].Name != undefined){
+                               			op=objArray;
+                               		}else {
+                               			if(root[x].Name != undefined){
 
-                           				parentTagName=root[x].Name;
-                           				op[parentTagName]={};
-                           				root[x].Name="";
-                           				for(p=0;p<n;p++){	   
-                           					iterate(root[val][p],label,op[parentTagName]);
-                           					ignore=false;
-                           				}	
-                           			}else {
-                           				for(q=0;q<n;q++){	   
-                           					iterate(root[val][q],label,op);
-                           					ignore=false;
-                           				}
-                           			}
-                           		}	
-                           	}
-                           	else if(Object.isObject(root[x])){
-                           		iterate(root[x],label,op);
-                           	}
-                           }
-                           else if(x=='Name'){
-                          	if(!ignore && root[x]!=""){
-                           		if(cardinality){
-                           			if(objectFormat){
-                           				arr=Array(len)
-                           				for(keys=0;keys<len;keys++){
-                           					arr[keys]={};
-                           				}
-                           				op[root[x]]=arr;
-                           				objectFormat=false;
-                           			}
-                           			else {
-                           				arr=Array(len)
-                           				for(keys=0;keys<len;keys++){
-                           					arr[keys]=root[x]+(keys+1);
-                           				}  
-                           				op[root[x]]=arr;
-                           			}
-                           			cardinality=false;
-                           		}else if(objectFormat){
+                               				parentTagName=root[x].Name;
+                               				op[parentTagName]={};
+                               				root[x].Name="";
+                               				for(p=0;p<n;p++){	   
+                               					iterate(root[val][p],label,op[parentTagName]);
+                               					ignore=false;
+                               				}	
+                               			}else {
+                               				for(q=0;q<n;q++){	   
+                               					iterate(root[val][q],label,op);
+                               					ignore=false;
+                               				}
+                               			}
+                               		}	
+                               	}
+                               	else if(Object.isObject(root[x])){
+                               		iterate(root[x],label,op);
+                               	}
+                               }
+                               else if(x=='Name'){
+                               	if(!ignore && root[x]!=""){
+                               		if(cardinality){
+                               			if(objectFormat){
+                               				arr=Array(len)
+                               				for(keys=0;keys<len;keys++){
+                               					arr[keys]={};
+                               				}
+                               				op[root[x]]=arr;
+                               				objectFormat=false;
+                               			}
+                               			else {
+                               				arr=Array(len)
+                               				for(keys=0;keys<len;keys++){
+                               					arr[keys]=root[x]+(keys+1);
+                               				}  
+                               				op[root[x]]=arr;
+                               			}
+                               			cardinality=false;
+                               		}else if(objectFormat){
 	 				                    //key=root[x];
 	 				                    op[root[x]]={};
 	 				                    objectFormat=false;
@@ -158,7 +183,7 @@
 	                    				//		op[root[x]]=nestedJson;
 										//		nesting=false;
 									}else if(root[x]!=modelName){ 
-										if(val=='String'){
+										if(dataValue==""){
 											op[root[x]]=root[x];
 										}else {
 											op[root[x]]=dataValue;
@@ -185,18 +210,23 @@
 										len=cardinalityChecker(root[x],"Cardinality");
 										root[x].Cardinality="";
 										cardinality=false;
-										nestedCardinality=true;
-										nesArray=Array(len);
-										for(r=0;r<len;r++){
-											nesArray[r]={}
+										//nestedCardinality=true;
+										if(len==1){
+											op[rootTagName]={};
+											iterate(root[nesVal],parentTagName,op[rootTagName]);
+										}else if(len==2){
+											nesArray=Array(len);
+											for(r=0;r<len;r++){
+												nesArray[r]={}
+											}
+											iterate(root[nesVal],parentTagName,nesArray[0]);
+											if(len==2){
+												nesArray[1]=nesArray[0];
+											}     
+											console.log("nested Array :",JSON.stringify(nesArray));
+											op[rootTagName]=nesArray; 
 										}
-										iterate(root[nesVal],parentTagName,nesArray[0]);
-										if(len==2){
-											nesArray[1]=nesArray[0];
-										}     
-										console.log("nested Array :",JSON.stringify(nesArray));
-										op[rootTagName]=nesArray; 
-										nestedCardinality=false;
+										//nestedCardinality=false;
 									} else {
 										op[parentTagName]={};
 										iterate(root[x],parentTagName,op[parentTagName]);
@@ -238,7 +268,12 @@
                        else if(x=='Value'){
                        	nestedModelName=root[x];
                        	nestedCreator(nestedModelName,op);
+
                        	nesting =true;
+                       }
+                       else if(x=='type'){
+                       	refModelName=root[x];
+                       	nestedCreator(refModelName,op);
                        }
                    }
                }	
@@ -246,8 +281,7 @@
            </script>
        </head>
        <body>
-<!-- 
-		<div>   
+    <!-- <div>   
 		<textarea name="uiOutput" id="myTextArea" rows="100" cols="100"></textarea>
 	</div> -->
 </body>

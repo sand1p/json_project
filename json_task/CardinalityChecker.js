@@ -12,8 +12,8 @@ function cardinalityChecker(root,x){
 		arrLen = 1;
 	}else if(root[x][0] == 1){
 		arrLen = 2;
-	}else {
-		arrLen=0;
+	}else if(root[x][0]== 0){
+		arrLen=1;
 	}
 	setCardinality(true);
 	return arrLen;

@@ -14,6 +14,7 @@ flag=0;
 objectFormat=false;
 dateFormat=false;
 cardinality=false;
+nestedOutput={};
 nestedCardinality=false;
 ignore=false;
 len=0;
@@ -40,6 +41,12 @@ function isEmpty(obj) {
     return JSON.stringify(obj) === JSON.stringify({});
 }
 
+function getNestedOutput(){
+	return nestedOutput;
+}
+function setNestedOutput(nestedOutputLocal){
+	nestedOutput=nestedOutputLocal;
+}
 function getObjectFormat(){
 	return objectFormat;  
 } 

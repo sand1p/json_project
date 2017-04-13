@@ -18,15 +18,33 @@ function nestedCreator(nestedModelName,nestedOutput){
 					parentTagName=res["Name"];
 					//nestedOutput[parentTagName]={};
 					res["Name"]="";
+                    
 					if(res.Format!=undefined){
 						formatSelector(res,"Format");
 						if(dateFormat){
 							dataGenerator("DateTime");
-							 return;
+							return;
 						}
 					}
+                    /*if(res["Cardinality"]!=undefined){
+                    	resArrLen=cardinalityChecker(res,"Cardinality");
+                        if(resArrLen==2){
+                        	 resArr=Array(resArrLen);
+                        	 for(i=0;i<resArrLen;i++){
+                        	 	resArr[i]={};
+                        	 }
+                        	 iterate(res,parentTagName,resArr[0]);
+                             resArr[1]=resArr[0]; 
+
+                        	 nestedOutput=resArr;
+                        	 setNestedOutput(nestedOutput);
+                        }
+                    }
 				    //nesting=true;
+				    if(isEmpty(nestedOutput)){*/
 				    iterate(res,parentTagName,nestedOutput);
+				    //}
+
 				    if(isEmpty(nestedOutput)){
 				    	dataArr=nestedModelName.split(".");
 				    	flag=1;
