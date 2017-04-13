@@ -68,46 +68,50 @@
 				 				parentTagName=root[attrVal][attr].Name;
 				 				root[attrVal][attr].Name="";
 				 				op[parentTagName]={};
+				 				nestedRootTagName=parentTagName;
 				 				iterate(root[attrVal][attr],parentTagName,op[parentTagName]);
 				 			   
-				 				if(isEmpty(op[parentTagName])){
+				 				if(isEmpty(op[nestedRootTagName])){
 				 				     
                                     if(!isEmpty(getNestedOutput()) ){
-                                        op[parentTagName]=nestedOutput;
+                                        op[nestedRootTagName]=nestedOutput;
                                         setNestedOutput({});
 				 			        }else if(cardinality){
 				 						if(objectFormat){
 				 							arr=Array(len)
 				 							for(keys=0;keys<len;keys++){
-				 								arr[keys]={};
-				 								arr[keys][parentTagName]=parentTagName;
+				 								objects={};
+				 								objects[nestedRootTagName]=nestedRootTagName+(keys+1);
+                               					arr[keys]=objects[nestedRootTagName];
+				 								
+				 								//arr[keys][nestedRootTagName]=nestedRootTagName;
 				 							}
-				 							op[parentTagName]=arr;
+				 							op[nestedRootTagName]=arr;
 				 							objectFormat=false;
 				 						}
 				 						else {
 				 							arr=Array(len)
 				 							for(keys=0;keys<len;keys++){
-				 								arr[keys]=parentTagName+(keys+1);
+				 								arr[keys]=nestedRootTagName+(keys+1);
 				 							}  
-				 							op[parentTagName]=arr;
+				 							op[nestedRootTagName]=arr;
 				 						}
 				 						cardinality=false;
 				 					}  
 				 					else if(objectFormat){
                                    			//key=root[x];
-                                   			op[parentTagName]={};
+                                   			op[nestedRootTagName]={};
                                    			objectFormat=false;
 
                                    		} else if(dateFormat){
-                                   			op[parentTagName]=dataValue;    
+                                   			op[nestedRootTagName]=dataValue;    
                                    			setDateFormat(false);
                                    		}
                                    		else{
                                    			if(dataValue==""){
-                                   				op[parentTagName]=parentTagName;
+                                   				op[nestedRootTagName]=nestedRootTagName;
                                    			}else {
-                                   				op[parentTagName]=dataValue;
+                                   				op[nestedRootTagName]=dataValue;
                                    			}
                                    		}
                                    	}  
@@ -162,7 +166,8 @@
                                			if(objectFormat){
                                				arr=Array(len)
                                				for(keys=0;keys<len;keys++){
-                               					arr[keys]={};
+                               					objects[root[x]]=root[x]+(keys+1);
+                               					arr[keys]=objects[root[x]];
                                				}
                                				op[root[x]]=arr;
                                				objectFormat=false;

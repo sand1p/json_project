@@ -18,7 +18,7 @@ function nestedCreator(nestedModelName,nestedOutput){
 					parentTagName=res["Name"];
 					//nestedOutput[parentTagName]={};
 					res["Name"]="";
-                    
+					
 					if(res.Format!=undefined){
 						formatSelector(res,"Format");
 						if(dateFormat){
@@ -26,24 +26,23 @@ function nestedCreator(nestedModelName,nestedOutput){
 							return;
 						}
 					}
-                    /*if(res["Cardinality"]!=undefined){
-                    	resArrLen=cardinalityChecker(res,"Cardinality");
-                        if(resArrLen==2){
-                        	 resArr=Array(resArrLen);
-                        	 for(i=0;i<resArrLen;i++){
-                        	 	resArr[i]={};
-                        	 }
-                        	 iterate(res,parentTagName,resArr[0]);
-                             resArr[1]=resArr[0]; 
-
-                        	 nestedOutput=resArr;
-                        	 setNestedOutput(nestedOutput);
-                        }
-                    }
+					if(res["Cardinality"]!=undefined){
+						resArrLen=cardinalityChecker(res,"Cardinality");
+						if(resArrLen==2){
+							resArr=Array(resArrLen);
+							for(i=0;i<resArrLen;i++){
+								resArr[i]={};
+							}
+							iterate(res,parentTagName,resArr[0]);
+							resArr[1]=resArr[0]; 
+							nestedOutput=resArr; 
+							setNestedOutput(nestedOutput);
+						}
+					}
 				    //nesting=true;
-				    if(isEmpty(nestedOutput)){*/
-				    iterate(res,parentTagName,nestedOutput);
-				    //}
+				    if(isEmpty(nestedOutput)){
+				    	iterate(res,parentTagName,nestedOutput);
+				    }
 
 				    if(isEmpty(nestedOutput)){
 				    	dataArr=nestedModelName.split(".");
@@ -51,41 +50,41 @@ function nestedCreator(nestedModelName,nestedOutput){
 				    	nestedCreator(dataArr[0]);
 				    }
 				}else {
-				 	iterate(res,"",nestedOutput);
+					iterate(res,"",nestedOutput);
 				}
 				console.log("nested output :"+JSON.stringify(nestedOutput));
 			//	document.getElementById("myTextArea").value =JSON.stringify(nestedOutput);
-               return ;
+			return ;
+		}
+		else {
+			for(elem in res){
+				if(dataTypes.includes(elem)){
+					dataValue=dataGenerator(elem);
+					if(Array.isArray(res[elem])){
+						arrLength=res[elem].length;
+						nesVal=elem;
+						for(i=0;i<arrLength;i++){
+							if(res[nesVal][i].Name==parentTagName){
+								if(res[nesVal][i].Cardinality!=undefined){
+									len=cardinalityChecker(res[nesVal][i],"Cardinality");
+									setLen(len);
+									cardinality=true;
+									setCardinality(true)
+								}
+								if(res[nesVal][i].Format!=undefined){
+									objectFormat=formatSelector(res[nesVal][i],"Format")
+									setObjectFormat(true);
+								}
+								flag=0;
+								return;
+							}
+						}
+					}
+				}       
 			}
-			else {
-                for(elem in res){
-                	if(dataTypes.includes(elem)){
-                		dataValue=dataGenerator(elem);
-                		if(Array.isArray(res[elem])){
-                             arrLength=res[elem].length;
-                             nesVal=elem;
-                             for(i=0;i<arrLength;i++){
-                                if(res[nesVal][i].Name==parentTagName){
-                                	if(res[nesVal][i].Cardinality!=undefined){
-                                		len=cardinalityChecker(res[nesVal][i],"Cardinality");
-                                		setLen(len);
-                                        cardinality=true;
-                                		setCardinality(true)
-                                	}
-                                	if(res[nesVal][i].Format!=undefined){
-                                		objectFormat=formatSelector(res[nesVal][i],"Format")
-                                		setObjectFormat(true);
-                                	}
-                                	 flag=0;
-                                     return;
-                               	}
-                            }
-            	  		}
-            	    }       
-                }
-				flag=0;
-			}
+			flag=0;
 		}
 	}
-	http.send(JSON.stringify(data));
+}
+http.send(JSON.stringify(data));
 }	
