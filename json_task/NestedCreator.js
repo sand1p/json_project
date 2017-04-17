@@ -1,6 +1,6 @@
 function nestedCreator(nestedModelName,nestedOutput){
 	data=bodyCreator(nestedModelName);
-	console.log("data :", data);
+	console.log("data :",data);
 	var http = new XMLHttpRequest();
 	var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
 	var params = "SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
@@ -14,10 +14,10 @@ function nestedCreator(nestedModelName,nestedOutput){
 			res=JSON.parse(res);
 			console.log("nested  result :",res);
 			if(flag==0){
-				if(res["Name"]!=undefined){
-					parentTagName=res["Name"];
+				if(res.Name!=undefined){
+					parentTagName=res.Name;
 					//nestedOutput[parentTagName]={};
-					res["Name"]="";
+					res.Name="";
 					
 					if(res.Format!=undefined){
 						formatSelector(res,"Format");
@@ -26,7 +26,7 @@ function nestedCreator(nestedModelName,nestedOutput){
 							return;
 						}
 					}
-					if(res["Cardinality"]!=undefined){
+					if(res.Cardinality!=undefined){
 						resArrLen=cardinalityChecker(res,"Cardinality");
 						if(resArrLen==2){
 							resArr=Array(resArrLen);
@@ -34,18 +34,33 @@ function nestedCreator(nestedModelName,nestedOutput){
 								resArr[i]={};
 							}
 							iterate(res,parentTagName,resArr[0]);
-							resArr[1]=resArr[0]; 
+
+							if(isEmpty(resArr[0])){
+								for(i=0;i<resArrLen;i++){
+									if(objectFormat){
+								    	 resArr[i][parentTagName+(i+1)]=parentTagName+(i+1);
+							        }
+							    	else {
+                                    	 resArr[i]=parentTagName+(i+1);
+							    	} 
+								}
+							}else {
+								resArr[1]=resArr[0];
+							}
 							nestedOutput=resArr; 
 							setNestedOutput(nestedOutput);
 						}
 					}
 				    //nesting=true;
 				    if(isEmpty(nestedOutput)){
-				    	iterate(res,parentTagName,nestedOutput);
+				    	nestedOutput[parentTagName]={};
+				    	iterate(res,parentTagName,nestedOutput[parentTagName]);
+				    	setNestedOutput(nestedOutput);
 				    }
 
 				    if(isEmpty(nestedOutput)){
 				    	dataArr=nestedModelName.split(".");
+				    	
 				    	flag=1;
 				    	nestedCreator(dataArr[0]);
 				    }

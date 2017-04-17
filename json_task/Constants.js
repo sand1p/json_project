@@ -3,6 +3,7 @@ modelName="";
 nestedJson={};
 nestedObj={};
 //parentTagName="";
+refObject={}
 val="";
 objArray=[];
 nesArray=null;
@@ -97,4 +98,12 @@ function getOutput(){
 
 function setOutput(outputLocal){
 	output=outputLocal;
+}
+
+function getRefObject(){
+	refObject;
+}
+
+function setRefObject(refObjectLocal){
+     refObject=refObjectLocal;
 }

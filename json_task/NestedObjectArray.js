@@ -13,7 +13,5 @@ function nestedObjectArray(root,label, op){
 			objArray[arrLen]=strObj;
 		}
 		op[label]=objArray;	
-	}
-
-	
+	}	
 }

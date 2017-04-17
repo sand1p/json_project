@@ -14,7 +14,7 @@ function dummyCreator(modelName){
 	http.onreadystatechange = function(){//Call a function when the state changes.
 		if(/*http.readyState == 4 && */http.status == 200){
 			http.responseText;
-			var res =http.responseText;
+		  	var res =http.responseText;
 			res=JSON.parse(res);
 			console.log("result :",res);
 			if(res.Name !='undefined'){
@@ -24,11 +24,14 @@ function dummyCreator(modelName){
 			}else {
 				iterate(res,"Show",output["create"]);
 			}
-			console.log("output :"+JSON.stringify(output));
-
-
+			if(output.create.undefined!=undefined){
+                document.getElementById("outputArea").value=modelName+" Invalid query";	 
+			}
+			else {
+				document.getElementById("outputArea").value=JSON.stringify(output);	 
+			}
+			
 		}
-
 	}
 	http.send(JSON.stringify(data));
 }
