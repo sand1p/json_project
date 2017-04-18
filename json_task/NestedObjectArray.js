@@ -1,5 +1,4 @@
-function nestedObjectArray(root,label, op){
-      	
+function nestedObjectArray(root,label, op){     	
 	if(cardinality){
 		for(arrLen=0;arrLen<len;arrLen++){
 			strObj={};

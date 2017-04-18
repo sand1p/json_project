@@ -4,6 +4,8 @@ nestedJson={};
 nestedObj={};
 //parentTagName="";
 refObject={}
+attribute=false;
+reference=false;
 val="";
 objArray=[];
 nesArray=null;
@@ -106,4 +108,18 @@ function getRefObject(){
 
 function setRefObject(refObjectLocal){
      refObject=refObjectLocal;
+}
+function getAttribute(){
+	return attribute;
+}
+
+function setAttribute(attributeLocal){
+	attribute=attributeLocal;
+}
+function getReference(){
+	return reference;
+}
+
+function setReference(referenceLocal){
+	reference=referenceLocal;
 }

@@ -34,10 +34,13 @@
 				 		objectFormat=formatSelector(root,x);
 				 	}
 				 	else if(x == 'Reference'){
+				 		setReference(true);
 				 		op=referenceHandler(root,x,op);
 				 		console.log("REferenfce  output : ", JSON.stringify(op));
+				 		//setReference(false);
 				 	}
 				 	else if(x == 'Attribute'){
+				 		setAttribute(true);
 				 		if(Array.isArray(root[x])){
 				 			attrLen=root[x].length;
 				 			attrVal=x;
@@ -102,6 +105,7 @@
                                    	}  
                                    	ignore=false;                         } 
                                    }
+                                //   setAttribute(false);
                                }
                                else if(dataTypes.includes(x)){
                                	dataValue=dataGenerator(x);

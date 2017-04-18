@@ -53,9 +53,13 @@ function nestedCreator(nestedModelName,nestedOutput){
 					}
 				    //nesting=true;
 				    if(isEmpty(nestedOutput)){
-				    	nestedOutput[parentTagName]={};
-				    	iterate(res,parentTagName,nestedOutput[parentTagName]);
-				    	setNestedOutput(nestedOutput);
+				    	if(getReference()){
+				    		nestedOutput[parentTagName]={};
+				    		iterate(res,parentTagName,nestedOutput[parentTagName]);
+				    		setNestedOutput(nestedOutput);
+				        }else if(getAttribute){
+				        	iterate(res,parentTagName,nestedOutput);
+				        }
 				    }
 
 				    if(isEmpty(nestedOutput)){
