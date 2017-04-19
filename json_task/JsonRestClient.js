@@ -28,7 +28,8 @@ function dummyCreator(modelName){
                 document.getElementById("outputArea").value=modelName+" Invalid query";	 
 			}
 			else {
-				document.getElementById("outputArea").value=JSON.stringify(output);	 
+				//document.getElementById("outputArea").value=JSON.stringify(output);	 
+				responseHandler();
 			}
 			
 		}

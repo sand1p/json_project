@@ -12,6 +12,7 @@
 	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\ReferenceHandler.js"> </script>
 	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\CreateTemplate.js"> </script>
 	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\Recursion.js"> </script>
+	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\ResponseHandler.js"> </script>
 	<title>cdpTool</title>
 
 	<div>
@@ -19,29 +20,104 @@
 			<option value="1">Light</option>
 			<option value="2" selected="selected">GenericEvent</option>
 			<option value="3">MobilityPOM</option>
-
-			<option value="1">Light</option>
-			<option value="2" selected="selected">GenericEvent</option>
-			<option value="3">MobilityPOM</option>
-
+			<option value="4">LightZone</option>
+			<option value="5">LightProvider</option>
+			<option value="6">LightPrivate</option>
+			<option value="7">LightSchedule</option>
+			<option value="8">ParkingSpace</option>
+			<option value="9">klWasteBin</option>
+			<option value="10">wasteCollectionTrip</option>
+			<option value="11">WasteCollectionRidership</option>
+			<option value="12">WasteBinPrivate</option>
+			<option value="13">ConstructionWork</option>
+			<option value="14">WifiCrowdZone</option>
+			<option value="15">PersonalDevice</option>
+			<option value="16">PersonalDevicePrivate</option>
+			<option value="15">Powermeter</option>
+			<option value="16">AQIStandard</option>
+			<option value="17">AirQualityData</option>
+			<option value="18">AirQualitySensor</option>
+			<option value="19">AmbientLightData</option>
+			<option value="20">AmbientLightSensor</option>
+			<option value="21">AmbientNoiseData</option>
+			<option value="22">AmbientNoiseSensor</option>
+			<option value="23">CommonEnvironmentData</option>
+			<option value="24">EnvironmentData</option>
+			<option value="25">EnvironmentSensor</option>
+			<option value="26">InclinometerData</option>
+			<option value="27">InclinometerSensor</option>
+			<option value="28">VibratingWireData</option>
+			<option value="29">VibratingWireSensor</option>
+			<option value="30">AmbientTemperatureData</option>
+			<option value="31">AmbientTemperatureSensor</option>
+			<option value="32">AmbientHumidityData</option>
+			<option value="33">ParkingSpot</option>
+			<option value="34">ParkingZoneType</option>
+			<option value="35">ParkingArea</option>
+			<option value="36">OccupiedParkingArea</option>
+			<option value="37">FloatingParkingSession</option>
+			<option value="38">ParkingEvent</option>
+			<option value="39">ParkingSpacePrivate</option>
+			<option value="40">ParkingAreaPrivate</option>
+			<option value="41">OccupiedParkingAreaPrivate</option>
+			<option value="42">EmailConfig</option>
+			<option value="43">EmailResponseExecutor</option>
+			<option value="44">HTTPResponseExecutor</option>
+			<option value="45">ResponseTemplate</option>
+			<option value="46">RoadSegment</option>
+			<option value="47">RoadSegmentLane</option>
+			<option value="48">RoadClass</option>
+			<option value="49">VehicleClass</option>
+			<option value="50">LaneType</option>
+			<option value="51">RoadSegmentPrivate</option>
+			<option value="52">RoadSegmentLanePrivate</option>
+			<option value="53">FareRules</option>
+			<option value="54">Zone</option>
+			<option value="55">StopTimes</option>
+			<option value="56">TransitTrip</option>
+			<option value="57">Client</option>
+			<option value="58">TransitRidership</option>
+			<option value="59">TransitRidershipPrivate</option>
+			<option value="60">WasteSpace</option>
+			<option value="61">WasteDumpSpace</option>
+			<option value="62">CustomerComplaints</option>
+			<option value="63">CommonEnvironmentData</option>
+			<option value="64">EnvironmentData</option>
+			<option value="65">EnvironmentSensor</option>
+			<option value="66">InclinometerData</option>
+			<option value="67">InclinometerSensor</option>
+			<option value="68">VibratingWireData</option>
+			<option value="69">VibratingWireSensor</option>
+			<option value="70">Situation</option>
+			<option value="71">SnSEvent</option>
+			<option value="72">ResponsePlan</option>
+			<option value="73">UltraVioletSensor</option>
+			<option value="74">UltraVioletData</option>
+			<option value="75">Pollutant</option>
+			<option value="76">AmbientHumiditySensor</option>
+			<option value="77">BarometerData</option>
+			<option value="78">Barometer</option>
+			<option value="79">ParkingSpotPrivate</option>
+			<option value="80">Stop</option>
+			<option value="81">WasteBin</option>
+			<option value="82">SocialMediaMonitor</option>
 		</select>
 		<br/>
 		<button onClick="GetSelectedItem('modelName');">Choose Model</button>
 	</div>
 	<div>
-		<textarea name="uiOutput" id="outputArea" rows="40" cols="200" placeholder="output is here"></textarea>
+		<textarea name="uiOutput" id="outputArea" rows="40" cols="188" placeholder="output is here"></textarea>
 	</div>
 	<script type="text/javascript">
 		function GetSelectedItem(el)
 		{
 			var e = document.getElementById(el);
 			modelName=e.options[e.selectedIndex].text;
-				//alert(modelName)
-				dummyCreator(modelName);	
-			}
-		</script>
-	</head>
-	<body>
+			dummyCreator(modelName);	
+		}
+	</script>
+</head>
+<body>
 
-	</body>
-	</html>
+</body>
+</html>
