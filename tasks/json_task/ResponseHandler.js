@@ -1,13 +1,12 @@
 function responseHandler(){
-    body=document.getElementById("outputArea").value;
-    //body=JSON.stringify(body,4);
+    body=JSON.stringify(output,4);
     var http=new XMLHttpRequest();
-  //  var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
-    createUrl=document.getElementById('createUrl').value;
+    var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
     var params = "SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
-	http.open("POST", createUrl,false);
+	http.open("POST", url,false);
+	 //Send the proper header information along with the request
 	http.setRequestHeader("Content-type", "application/json");
-	 http.onreadystatechange = function(){ 
+	 http.onreadystatechange = function(){ //Call a function when the state changes.
 		    if(http.status == 200){
 		 	http.responseText;
 			var res =http.responseText;
@@ -16,4 +15,5 @@ function responseHandler(){
 		}
 	}
 	http.send(body);
+
 }

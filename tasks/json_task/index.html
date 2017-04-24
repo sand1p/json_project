@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!-- <script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\script.js"> </script> -->
+	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\script.js"> </script>
 	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\JsonRestClient.js"> </script>
 	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\Constants.js"> </script>
 	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\CardinalityChecker.js"> </script>
@@ -14,9 +14,7 @@
 	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\Recursion.js"> </script>
 	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\ResponseHandler.js"> </script>
 	<title>cdpTool</title>
-    
-    <h1> CDP tool for Data Population </h1>
-    <p>Select required model name from dropdown list </p>
+
 	<div>
 		<select id="modelName">
 			<option value="1">Light</option>
@@ -103,21 +101,11 @@
 			<option value="80">Stop</option>
 			<option value="81">WasteBin</option>
 		</select>
-		<button onClick="GetSelectedItem('modelName');">Choose Model</button>	
-	</div>
-	<p>Enter show URL below </p>
-	<div><textarea name="records" id="showUrl" rows="1" cols="150" placeholder="">http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User</textarea></div>
-	
-	<p>Enter Create URL below </p>
-	<div><textarea name="records" id="createUrl" rows="1" cols="150" placeholder="">http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User</textarea></div>
-	
-	<p>Number of records you want to create</p> 
-	<div><textarea name="records" id="inputRecords" rows="1" cols="5" placeholder="">1</textarea></div>
-	<div>
-		<textarea name="uiOutput" id="outputArea" rows="20" cols="150" placeholder="output is here"></textarea>
+		<br/>
+		<button onClick="GetSelectedItem('modelName');">Choose Model</button>
 	</div>
 	<div>
-		<button onClick="createQuery();"> Send </button>
+		<textarea name="uiOutput" id="outputArea" rows="40" cols="188" placeholder="output is here"></textarea>
 	</div>
 	<script type="text/javascript">
 		function GetSelectedItem(el)
@@ -126,15 +114,6 @@
 			modelName=e.options[e.selectedIndex].text;
 			dummyCreator(modelName);	
 		}
-
-		function createQuery(){
-			records=document.getElementById('inputRecords').value;
-			for(rec=0;rec<records;rec++){
-				responseHandler()
-			}
-		}
-		
-
 	</script>
 </head>
 <body>
