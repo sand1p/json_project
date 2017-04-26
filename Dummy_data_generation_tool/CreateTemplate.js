@@ -1,8 +1,9 @@
 function create(op,refObject,refName){
 	var http = new XMLHttpRequest();
-             var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
+            // var url = "http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
+            createUrl=document.getElementById('createUrl').value;
              var params = "SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User";
-             http.open("POST", url,false);
+             http.open("POST", createUrl,false);
 			 //Send the proper header information along with the request
 			 http.setRequestHeader("Content-type", "application/json");
 			 http.onreadystatechange = function(){ //Call a function when the state changes.
@@ -15,5 +16,4 @@ function create(op,refObject,refName){
             	}
             }
             http.send(JSON.stringify(refObject));
-
 }

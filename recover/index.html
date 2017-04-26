@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\script.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\JsonRestClient.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\Constants.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\CardinalityChecker.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\FormatSelector.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\DataGenerator.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\bodyCreator.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\NestedCreator.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\ReferenceHandler.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\CreateTemplate.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\Recursion.js"> </script>
-	<script type="text/javascript" src="C:\inetpub\wwwroot\cdp\json_task\ResponseHandler.js"> </script>
+	<!-- <script type="text/javascript" src="script.js"> </script> -->
+	<script type="text/javascript" src="JsonRestClient.js"> </script>
+	<script type="text/javascript" src="Constants.js"> </script>
+	<script type="text/javascript" src="CardinalityChecker.js"> </script>
+	<script type="text/javascript" src="FormatSelector.js"> </script>
+	<script type="text/javascript" src="DataGenerator.js"> </script>
+	<script type="text/javascript" src="bodyCreator.js"> </script>
+	<script type="text/javascript" src="NestedCreator.js"> </script>
+	<script type="text/javascript" src="ReferenceHandler.js"> </script>
+	<script type="text/javascript" src="CreateTemplate.js"> </script>
+	<script type="text/javascript" src="Recursion.js"> </script>
+	<script type="text/javascript" src="ResponseHandler.js"> </script>
 	<title>cdpTool</title>
-
+    
+    <h1> CDP tool for Data Population </h1>
+    <p>Select required model name from dropdown list </p>
 	<div>
 		<select id="modelName">
 			<option value="1">Light</option>
@@ -101,11 +103,21 @@
 			<option value="80">Stop</option>
 			<option value="81">WasteBin</option>
 		</select>
-		<br/>
-		<button onClick="GetSelectedItem('modelName');">Choose Model</button>
+		<button onClick="GetSelectedItem('modelName');">Choose Model</button>	
+	</div>
+	<p>Enter show URL below </p>
+	<div><textarea name="records" id="showUrl" rows="1" cols="150" placeholder="">http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User</textarea></div>
+	
+	<p>Enter Create URL below </p>
+	<div><textarea name="records" id="createUrl" rows="1" cols="150" placeholder="">http://localhost:8080/fid-CIMQueryInterface?SensorCustomerKey=CDP-All&AppKey=CDP-App&UserKey=CDP-User</textarea></div>
+	
+	<p>Number of records you want to create</p> 
+	<div><textarea name="records" id="inputRecords" rows="1" cols="5" placeholder="">1</textarea></div>
+	<div>
+		<textarea name="uiOutput" id="outputArea" rows="20" cols="150" placeholder="output is here"></textarea>
 	</div>
 	<div>
-		<textarea name="uiOutput" id="outputArea" rows="40" cols="188" placeholder="output is here"></textarea>
+		<button onClick="createQuery();"> Send </button>
 	</div>
 	<script type="text/javascript">
 		function GetSelectedItem(el)
@@ -114,6 +126,16 @@
 			modelName=e.options[e.selectedIndex].text;
 			dummyCreator(modelName);	
 		}
+
+		function createQuery(){
+			var records=document.getElementById('inputRecords').value;
+			var data=document.getElementById("outputArea").value;
+			for(var rec=0;rec<records;rec++){
+				responseHandler(data)
+			}
+		}
+		
+
 	</script>
 </head>
 <body>

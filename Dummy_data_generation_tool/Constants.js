@@ -22,7 +22,8 @@ nestedCardinality=false;
 ignore=false;
 len=0;
 dataTypes=['String','Double','DateTime','Boolean','Number','Integer']
-ignorable=['Default',"ReadOnly","Constant","Eq","Transient","default"]
+
+ignorable=['Default',"ReadOnly","Constant","Eq","Transient","default","geohash","locationId"]
 
 if( typeof Array.isArray !== 'function' ) {
 	Array.isArray = function( arr ) {
